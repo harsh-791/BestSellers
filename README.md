@@ -70,6 +70,30 @@ curl -s http://127.0.0.1:8080/metrics
 
 Rating matches are exact, the same rule as the original program. `4.7` does not mean "at least 4.7".
 
+## What a running cluster looks like
+
+These views are from the local kind cluster after `./scripts/forward.sh`.
+
+Grafana shows the catalog size, the price-lookup flag, and the request rate.
+
+![Grafana BestSellers dashboard with 550 books loaded](docs/images/grafana-overview.png)
+
+The same dashboard's latency panel stays well under a tenth of a second.
+
+![Grafana p95 latency for health, metrics, and readiness](docs/images/grafana-latency.png)
+
+Prometheus graphs `books_loaded` directly. It stays at 550 because the catalog is loaded once at startup.
+
+![Prometheus graph of books_loaded](docs/images/prometheus-graph.png)
+
+The scrape target is the API service, and it is up.
+
+![Prometheus target bestsellers up](docs/images/prometheus-targets.png)
+
+Jaeger shows one count request as two spans: `GET /books/count` and the child span `book.count`.
+
+![Jaeger trace for a book count request](docs/images/jaeger-trace.png)
+
 ## Run without Kubernetes
 
 ```bash
