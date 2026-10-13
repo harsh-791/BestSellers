@@ -1,3 +1,5 @@
+package bestsellers;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -74,4 +76,4 @@ public final class BookQueries {
     private static String normalize(String value) {
         return value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
     }
-} 
+}
