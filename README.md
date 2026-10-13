@@ -6,8 +6,8 @@ The original program is still the command-line class `bestsellers.Driver`. The s
 
 ## Identity
 
-- Name: fill in before submission
-- Student identifier: fill in before submission
+- Name: Harsh Verma
+- Student: 23BCS10183
 - Project: BestSellers
 - Repository: https://github.com/harsh-791/BestSellers
 - Baseline commit: `4629097dd21fbe5d0425d86019199023b2c8f196`
