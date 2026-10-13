@@ -1,4 +1,8 @@
+package bestsellers;
+
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class Driver {
@@ -6,6 +10,8 @@ public class Driver {
         String csvPath = "data.csv";
         if (args.length > 0 && args[0] != null && !args[0].trim().isEmpty()) {
             csvPath = args[0];
+        } else if (!Files.exists(Path.of(csvPath)) && Files.exists(Path.of("src/main/resources/data.csv"))) {
+            csvPath = "src/main/resources/data.csv";
         }
         try {
             List<Book> books = DatasetReader.readBooksFromCsv(csvPath);
@@ -25,4 +31,4 @@ public class Driver {
             System.exit(1);
         }
     }
-} 
+}

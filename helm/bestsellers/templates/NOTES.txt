@@ -1,0 +1,7 @@
+BestSellers is a ClusterIP service in namespace {{ .Release.Namespace }}.
+Forward the API with:
+
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "bestsellers.fullname" . }} 8080:{{ .Values.service.port }}
+
+The image tag in this release is {{ .Values.image.tag }}.
+Roll back with: helm rollback {{ .Release.Name }} --namespace {{ .Release.Namespace }}

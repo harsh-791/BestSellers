@@ -1,0 +1,9 @@
+.git
+.github
+target
+helm
+kind
+docs
+scripts
+*.md
+.DS_Store

@@ -1,0 +1,37 @@
+replicaCount: 2
+fullnameOverride: bestsellers
+
+image:
+  repository: bestsellers
+  tag: local
+  pullPolicy: IfNotPresent
+
+service:
+  port: 8080
+
+# Leave empty to use the CSV bundled in the image. Set this only when a volume
+# provides that path. The chart does not keep a second copy of the catalog.
+csvPath: ""
+
+featureFlags:
+  priceLookup: true
+
+chaos:
+  failHealth: false
+
+tracing:
+  otlpEndpoint: http://jaeger:4318
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 70
