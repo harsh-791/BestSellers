@@ -25,7 +25,11 @@ That commit is the unchanged starting point: four Java classes and `data.csv` at
 | Signals | JSON logs, Prometheus metrics, OpenTelemetry traces in Jaeger |
 | Security | Non-root read-only container, no Kubernetes API token, ClusterIP only, secret scan in CI |
 
-The reasoning for each choice is in [docs/DECISIONS.md](docs/DECISIONS.md).
+Supporting material:
+
+- [docs/DECISIONS.md](docs/DECISIONS.md) explains the choices.
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) shows the request path and the delivery path.
+- [docs/RECOVERY.md](docs/RECOVERY.md) records a bad release, the rollback, and the CI runs.
 
 ## Prerequisites
 
