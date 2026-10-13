@@ -3,7 +3,6 @@ name: ci
 on:
   push:
   pull_request:
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -37,36 +36,3 @@ jobs:
           name: bestsellers-image
           path: bestsellers.tar
           retention-days: 3
-
-  deploy:
-    if: github.event_name == 'workflow_dispatch'
-    needs: image
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: bestsellers-image
-          path: dist
-      - name: Install kind and helm
-        run: |
-          curl -fsSL -o kind "https://kind.sigs.k8s.io/dl/v0.27.0/kind-linux-amd64"
-          sudo install -m 0755 kind /usr/local/bin/kind
-          curl -fsSL "https://get.helm.sh/helm-v3.16.4-linux-amd64.tar.gz" | tar -xz
-          sudo install -m 0755 linux-amd64/helm /usr/local/bin/helm
-      - name: Load image into Docker
-        run: docker load -i dist/bestsellers.tar
-      - name: Create cluster and deploy
-        run: |
-          kind create cluster --name bestsellers --config kind/cluster.yaml
-          kind load docker-image "bestsellers:${{ github.sha }}" --name bestsellers
-          helm upgrade --install observability helm/observability --namespace bestsellers --create-namespace --wait --timeout 180s
-          helm upgrade --install bestsellers helm/bestsellers \
-            --namespace bestsellers \
-            --set image.repository=bestsellers \
-            --set image.tag="${{ github.sha }}" \
-            --set image.pullPolicy=IfNotPresent \
-            --set autoscaling.enabled=false \
-            --wait --timeout 180s
-      - name: Smoke test
-        run: ./scripts/smoke.sh

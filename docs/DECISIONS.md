@@ -28,7 +28,7 @@ The CSV is not copied into the chart. It ships once, inside the jar. `CSV_PATH` 
 
 ## CI and CD
 
-Automatic work ends at a tested image artifact. Tests, a secret scan, and `docker build` run on every push and pull request. Deploying that artifact is manual: `workflow_dispatch` in GitHub Actions, or `./scripts/deploy.sh` on a laptop. The manual boundary is there because this environment has no shared cluster and a bad deploy should be a deliberate action.
+`.github/workflows/ci.yml` runs on every push and pull request: secret scan, tests, and `docker build`. It uploads the image and stops there. `.github/workflows/cd.yml` is a separate workflow that you start manually. It deploys only the artifact from a successful CI run of the same commit. `./scripts/deploy.sh` is the same deploy on a laptop. The manual boundary is there because this environment has no shared cluster and a bad deploy should be a deliberate action.
 
 The pipeline does not push to a registry. kind loads the image that Docker just built. That is a local constraint, not a production promotion flow. The same image tag is the Helm value, so the pod spec and the build refer to one identifier.
 

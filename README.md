@@ -20,7 +20,7 @@ That commit is the unchanged starting point: four Java classes and `data.csv` at
 | --- | --- |
 | Runtime | HTTP API in a container, Kubernetes Deployment |
 | Configuration | Helm values for image tag, feature flag, probes, resources |
-| Delivery | GitHub Actions runs tests and builds an image. Deploy is a manual workflow, or `./scripts/deploy.sh` locally |
+| Delivery | `.github/workflows/ci.yml` tests and builds an image. `.github/workflows/cd.yml` deploys that image when you start it |
 | Release | Image tag is the git commit. Rolling update with `maxUnavailable: 0`. `helm rollback` restores the previous revision |
 | Signals | JSON logs, Prometheus metrics, OpenTelemetry traces in Jaeger |
 | Security | Non-root read-only container, no Kubernetes API token, ClusterIP only, secret scan in CI |
@@ -126,9 +126,9 @@ helm upgrade bestsellers helm/bestsellers -n bestsellers --reuse-values --set fe
 
 ## Pipeline
 
-On every push and pull request, GitHub Actions runs `scripts/check-secrets.sh`, `mvn verify`, and `docker build`. The image is uploaded as a workflow artifact. Nothing deploys automatically.
+On every push and pull request, `.github/workflows/ci.yml` runs `scripts/check-secrets.sh`, `mvn verify`, and `docker build`. The image is uploaded as a workflow artifact. CI does not deploy.
 
-Deploying the cluster is the manual step: run `./scripts/deploy.sh` locally, or start the `deploy` job with `workflow_dispatch` on GitHub. That job loads the artifact into a kind cluster and runs `scripts/smoke.sh`.
+`.github/workflows/cd.yml` is started by hand from the Actions tab after that CI run is green. It downloads the image artifact for the same commit, loads it into a kind cluster, installs both Helm charts, and runs `scripts/smoke.sh`. Locally, `./scripts/deploy.sh` does the same deploy on your machine.
 
 ## Limitations
 
